@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# website: http://ogp.me/ns/website#">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="description" content="">
+    <meta property="og:title" content="Hubway Visualization Challenge">
+    
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2018-01-07">
+    
+    <meta property="og:description" content="">
+    <meta property="og:url" content="https://mayankshah1.github.io/post/hubway_visualization_challenge/">
+    <meta property="og:site_name" content="Mayank Shah">
+    
+    <meta name="generator" content="Hugo 0.32" />
+    <title>Hubway Visualization Challenge &middot; Mayank Shah</title>
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/default.min.css">
+    
+    <link rel="stylesheet" href="https://mayankshah1.github.io/css/style.css">
+    
+    <link href="https://mayankshah1.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Mayank Shah" />
+    
+    
+    <link rel="icon" href="https://mayankshah1.github.io/favicon.ico" />
+    
+
+    
+    
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top visible-xs">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+				<a class="navbar-brand" href="https://mayankshah1.github.io/">Mayank Shah</a>
+			
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				
+				
+					<li><a href="https://mayankshah1.github.io/about/">About</a></li>
+				
+					<li><a href="https://mayankshah1.github.io/post/">Blog</a></li>
+				
+					<li><a href="https://mayankshah1.github.io/tutorials/">Tutorials</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid">
+	<div class="row">
+		<div id="menu" class="hidden-xs col-sm-4 col-md-3">
+	<div id="menu-content" class="vertical-align">
+		
+			<h1 class="text-center"><a href="https://mayankshah1.github.io/">Mayank Shah</a></h1>
+		
+		
+		
+			<small class="text-center center-block">Welcome to my journey!</small>
+		
+		
+		
+			<img id="profile-pic" src="https://mayankshah1.github.io//img/profPic.jpg" alt="My Picture" class="img-circle center-block">
+		
+		<div id="social" class="text-center">
+			
+				<a href="https://github.com/mayankshah1"><i class="fa fa-github fa-2x"></i></a>
+			
+				<a href="https://www.linkedin.com/in/mayankshah11/"><i class="fa fa-linkedin fa-2x"></i></a>
+			
+
+			<a href="mailto:mayankshah11996@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
+		</div>
+		<div id="links" class="text-center">
+			
+			
+				<a href="https://mayankshah1.github.io/about/">About</a>
+			
+				<a href="https://mayankshah1.github.io/post/">Blog</a>
+			
+				<a href="https://mayankshah1.github.io/tutorials/">Tutorials</a>
+			
+		</div>
+	</div>
+</div>
+
+		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
+			<div class="row">
+				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
+
+<main>
+	<header>
+		<h1>Hubway Visualization Challenge</h1>
+	</header>
+
+	<article>
+		
+
+<h1 id="visualizing-hubway-data">Visualizing Hubway Data</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>While browsing around for an exploratory data analysis project, I came across the <a href="http://hubwaydatachallenge.org/">Hubway Data Visualization Challenge</a>. Hubway is a bicycle rental company that has stations throughout in Boston and the surrounding areas. The competition has already closed but the data was still available through the site. Having lived in Boston for a few years, I decided to play around with the data.</p>
+
+<h2 id="objective">Objective</h2>
+
+<p>In this blog, I will try to document the steps that I took to create my rendering of geospatial visualizations of Hubway&rsquo;s bicycle data. I would share with you how I approached this project.</p>
+
+<h2 id="heading-into-the-real-work">Heading into the real work!</h2>
+
+<h3 id="helper-functions">Helper Functions</h3>
+
+<p>Most of the code has been taken from <a href="https://github.com/feelosophy13">Howard&rsquo;s github.</a></p>
+
+<h4 id="function-to-load-data">Function to load data</h4>
+
+<p>Functions used to load data from the data directory.</p>
+
+<pre><code class="language-r">## load data
+loadData &lt;- function() {
+  missingTypes &lt;- c(NA, '', ' ')
+  trips &lt;&lt;- read.csv('./data/hubway_trips.csv', na.strings=missingTypes, stringsAsFactors=FALSE)
+  stations &lt;&lt;- read.csv('./data/hubway_stations.csv', na.strings=missingTypes, stringsAsFactors=FALSE)  
+}
+</code></pre>
+
+<h4 id="function-to-load-libraries">Function to load libraries</h4>
+
+<p>Functions to load the required packages.</p>
+
+<pre><code class="language-r"># load libraries
+usePackage &lt;- function(p) {
+  if (!is.element(p, installed.packages()[,1]))
+    install.packages(p, dep = TRUE)
+  require(p, character.only = TRUE)
+}
+</code></pre>
+
+<h4 id="loading-the-libraries">Loading the libraries</h4>
+
+<p>Now, we will load the important libraries <strong><em>dplyr</em></strong> and **_reshape2**</p>
+
+<pre><code class="language-r">loadLibraries &lt;- function() {
+  usePackage('dplyr')
+  usePackage('reshape2')
+}
+</code></pre>
+
+<h4 id="formating-the-data">Formating the data</h4>
+
+<p>Now, we will format the data sources and fix the data types such that data becomes clean and an effective analysis can be performed on it.</p>
+
+<pre><code class="language-r"># casting data types
+
+casteDataTypeForTripsDF &lt;- function(tripsDF) {
+  tripsDF$seq_id &lt;- NULL
+  tripsDF$status &lt;- NULL
+  tripsDF$start_date &lt;- strptime(tripsDF$start_date, format='%m/%d/%Y %H:%M:%S')
+  tripsDF$end_date &lt;- strptime(tripsDF$end_date, format='%m/%d/%Y %H:%M:%S')
+  tripsDF$bike_nr &lt;- as.factor(tripsDF$bike_nr)
+  tripsDF$subsc_type &lt;- as.factor(tripsDF$subsc_type)
+  tripsDF$zip_code &lt;- NULL
+  tripsDF$birth_date &lt;- as.factor(tripsDF$birth_date)
+  tripsDF$gender &lt;- as.factor(tripsDF$gender)
+  return(tripsDF)
+}
+
+casteDataTypeForStations &lt;- function(stationsDF) {
+  stationsDF$terminal &lt;- as.factor(stationsDF$terminal)
+  stationsDF$station &lt;- as.factor(stationsDF$station)
+  stationsDF$municipal &lt;- as.factor(stationsDF$municipal)
+  stationsDF$status &lt;- as.factor(stationsDF$status)
+  return(stationsDF)
+}
+</code></pre>
+
+<h4 id="removing-the-missing-rows">Removing the missing rows</h4>
+
+<p>Basic data cleaning to remove inconsistent data.</p>
+
+<pre><code class="language-r">removeRowsMissStns &lt;- function(tripsDF) {
+  tripsDF &lt;- subset(tripsDF, !is.na(strt_statn) &amp; !is.na(end_statn))
+  return(tripsDF)
+}
+</code></pre>
+
+<h4 id="aggregating-the-data">Aggregating the data</h4>
+
+<p>Now we will further aggregate the given datasets to produce our own subsets of data such that we can perform effective visualizations with them in Tableau without using the Data Interpreter and Dimensions &lt;-&gt; Measures conversions.</p>
+
+<pre><code class="language-r"># aggregate trips from station to station
+aggTripsS2S &lt;- function(tripsDF) {
+  tripsDF$start_date &lt;- as.character(tripsDF$start_date)
+  tripsDF$end_date &lt;- as.character(tripsDF$end_date)
+  
+  grp &lt;- group_by(tripsDF, strt_statn, end_statn)  # set up the grouping
+  agg &lt;- dplyr::summarize(grp, cnt=n())  #set up aggregation by groups
+  agg &lt;- arrange(agg, cnt)  # order the data
+  agg &lt;- collect(agg)  # grab the result
+  agg &lt;- as.data.frame(agg)
+
+  return(agg)
+}
+
+# add longitude and latitude info for starting stations
+addStartLocs &lt;- function(df) {
+  df$strtLng &lt;- stations$lng[match(df$strt_statn, stations$id)]
+  df$strtLat &lt;- stations$lat[match(df$strt_statn, stations$id)]
+  return(df)  
+}
+
+# add longitude and latitude info for ending stations
+addEndLocs &lt;- function(df) {
+  df$endLng &lt;- stations$lng[match(df$end_statn, stations$id)]
+  df$endLat &lt;- stations$lat[match(df$end_statn, stations$id)]
+  return(df)
+}
+
+# add longitude and latitude information to start and end stations
+addStartAndEndLocs &lt;- function(trAggDF) {
+  trAggDF &lt;- addStartLocs(trAggDF)
+  trAggDF &lt;- addEndLocs(trAggDF)
+  return(trAggDF)
+}
+</code></pre>
+
+<p>Adding some necessary extra columns and performing other aggregating stuff!.</p>
+
+<pre><code class="language-r"># dplyr count method
+dplyrCnt &lt;- function(grp) {
+  agg &lt;- dplyr::summarize(grp, cnt=sum(cnt))  # aggregate
+  agg &lt;- arrange(agg, cnt)  # order
+  agg &lt;- collect(agg)
+  agg &lt;- as.data.frame(agg)
+  return(agg)
+}
+
+# standardize column names for trip-counts-by-station dfs
+stdTripCtnByStnDFColnames &lt;- function(df) {
+  colnames(df) &lt;- tolower(colnames(df))
+  colnames(df) &lt;- gsub('^end(_)?|^strt(_)?|^start(_)?', '', colnames(df))
+  return(df)
+}
+
+# add station locations
+addStnLocs &lt;- function(df) {
+  df$lng &lt;- stations$lng[match(df$statn, stations$id)]
+  df$lat &lt;- stations$lat[match(df$statn, stations$id)]
+  return(df)
+}
+
+# aggregate number of incoming/outgoing trips by station id
+aggTripCntByStn &lt;- function(trAggDF) {
+
+  # incoming trip counts by station
+  grp &lt;- group_by(trAggDF, end_statn)
+  incTripCntByStnDF &lt;- dplyrCnt(grp)
+  incTripCntByStnDF &lt;- stdTripCtnByStnDFColnames(incTripCntByStnDF)
+  colnames(incTripCntByStnDF)[2] &lt;- 'inc_cnt'
+
+  # outgoing trip counts by station
+  grp &lt;- group_by(trAggDF, strt_statn)
+  outTripCntByStnDF &lt;- dplyrCnt(grp)
+  outTripCntByStnDF &lt;- stdTripCtnByStnDFColnames(outTripCntByStnDF)  
+  colnames(outTripCntByStnDF)[2] &lt;- 'out_cnt'
+  
+  # combine the two dfs, order, and return
+  outputDF &lt;- merge(incTripCntByStnDF, outTripCntByStnDF, by='statn')
+  outputDF$tot_cnt &lt;- outputDF$inc_cnt + outputDF$out_cnt
+  outputDF &lt;- outputDF[order(outputDF$statn), ]
+  return(outputDF)
+}
+
+# add incoming and outgoing trip percentages
+addIncOutTripPercs &lt;- function(byStnMetricDF) {
+  byStnMetricDF$inc_perc &lt;- round(byStnMetricDF$inc_cnt / byStnMetricDF$tot_cnt * 100, 2)
+  byStnMetricDF$out_perc &lt;- round(byStnMetricDF$out_cnt / byStnMetricDF$tot_cnt * 100, 2)
+  return(byStnMetricDF)
+}
+
+# function that takes in station-to-station pairs and collapses directionality of trips
+# e.g. stnID4-stnID120 trip and stnID120-stnID4 trip should be combined into one pair (either as stnID4-stnID120 or stnID120-stnID4)
+collapseDirectionS2S &lt;- function(trAggDF) {
+  output &lt;- trAggDF
+
+  # collapse directionality dimension
+  output$strtLng &lt;- output$strtLat &lt;- output$endLng &lt;- output$endLat &lt;- NULL
+  output[1:2] &lt;- t(apply(output, 1, function(x) sort(x[1:2])))
+  output &lt;- aggregate(cnt ~ ., data=output, FUN=sum)  
+  
+  # order the output df by strt_statn and end_statn
+  output &lt;- output[order(output$strt_statn, output$end_statn), ]
+
+  # add start and end locations
+  output &lt;- addStartAndEndLocs(output)
+  return(output)
+}
+</code></pre>
+
+<h5 id="finally-we-are-done-with-all-the-helper-functions">Finally we are done with all the helper functions.</h5>
+
+<h5 id="time-to-run-the-program">Time to run the program!!</h5>
+
+<h4 id="program-execution">Program Execution</h4>
+
+<pre><code class="language-r"># Loading the data and libraries
+loadData()
+loadLibraries()
+</code></pre>
+
+<p>Performing the data preprocessing tasks</p>
+
+<pre><code class="language-r"># preprocessing
+stations &lt;- casteDataTypeForStations(stations)
+trips &lt;- casteDataTypeForTripsDF(trips)
+trips &lt;- removeRowsMissStns(trips)
+</code></pre>
+
+<p>Aggregaring the data.</p>
+
+<pre><code class="language-r"># aggregating
+trAggS2S &lt;- aggTripsS2S(trips)
+trAggS2S &lt;- addStartAndEndLocs(trAggS2S)
+ndTrAggS2S &lt;- collapseDirectionS2S(trAggS2S)
+byStnMetric &lt;- aggTripCntByStn(trAggS2S)
+byStnMetric &lt;- addIncOutTripPercs(byStnMetric)
+byStnMetric &lt;- addStnLocs(byStnMetric)
+</code></pre>
+
+<p>Now we are done with loading the datasets and cleaning them. #####Let&rsquo;s see them!.</p>
+
+<h6 id="stations-data">Stations data</h6>
+
+<pre><code class="language-r">head(stations,5)
+</code></pre>
+
+<pre><code>##   id terminal                            station municipal      lat
+## 1  3   B32006             Colleges of the Fenway    Boston 42.34002
+## 2  4   C32000        Tremont St. at Berkeley St.    Boston 42.34539
+## 3  5   B32012 Northeastern U / North Parking Lot    Boston 42.34181
+## 4  6   D32000           Cambridge St. at Joy St.    Boston 42.36129
+## 5  7   A32000                           Fan Pier    Boston 42.35341
+##         lng   status
+## 1 -71.10081 Existing
+## 2 -71.06962 Existing
+## 3 -71.09018 Existing
+## 4 -71.06514 Existing
+## 5 -71.04462 Existing
+</code></pre>
+
+<h6 id="trips-data">Trips data</h6>
+
+<pre><code class="language-r">head(trips,5)
+</code></pre>
+
+<pre><code>##   hubway_id duration          start_date strt_statn            end_date
+## 1         8        9 2011-07-28 10:12:00         23 2011-07-28 10:12:00
+## 2         9      220 2011-07-28 10:21:00         23 2011-07-28 10:25:00
+## 3        10       56 2011-07-28 10:33:00         23 2011-07-28 10:34:00
+## 4        11       64 2011-07-28 10:35:00         23 2011-07-28 10:36:00
+## 5        12       12 2011-07-28 10:37:00         23 2011-07-28 10:37:00
+##   end_statn bike_nr subsc_type birth_date gender
+## 1        23  B00468 Registered       1976   Male
+## 2        23  B00554 Registered       1966   Male
+## 3        23  B00456 Registered       1943   Male
+## 4        23  B00554 Registered       1981 Female
+## 5        23  B00554 Registered       1983 Female
+</code></pre>
+
+<h6 id="tripaggregatedstationtostation-aggregated-data">TripAggregatedStationToStation aggregated data</h6>
+
+<pre><code class="language-r">head(trAggS2S,5)
+</code></pre>
+
+<pre><code>##   strt_statn end_statn cnt   strtLng  strtLat    endLng   endLat
+## 1          3       106   1 -71.10081 42.34002 -71.04586 42.33569
+## 2          3       119   1 -71.10081 42.34002 -71.07655 42.35041
+## 3          3       130   1 -71.10081 42.34002 -71.11402 42.37637
+## 4          3       133   1 -71.10081 42.34002 -71.12511 42.38029
+## 5          3       136   1 -71.10081 42.34002 -71.08639 42.36610
+</code></pre>
+
+<h6 id="bystationmetric-aggregated-data">ByStationMetric aggregated data</h6>
+
+<pre><code class="language-r">head(byStnMetric, 5)
+</code></pre>
+
+<pre><code>##   statn inc_cnt out_cnt tot_cnt inc_perc out_perc       lng      lat
+## 1     3    9260    9734   18994    48.75    51.25 -71.10081 42.34002
+## 2     4   17472   18057   35529    49.18    50.82 -71.06962 42.34539
+## 3     5   11058   10630   21688    50.99    49.01 -71.09018 42.34181
+## 4     6   22655   23322   45977    49.27    50.73 -71.06514 42.36129
+## 5     7    8883    9163   18046    49.22    50.78 -71.04462 42.35341
+</code></pre>
+
+<h6 id="creating-a-dataframe-that-can-be-used-for-tableau-visualization-of-traffic">Creating a dataframe that can be used for Tableau visualization of traffic.</h6>
+
+<pre><code class="language-r">tableau_path &lt;- data.frame(statn = numeric(),
+                           path_id = character(),
+                           cnt = numeric(),
+                           lat = numeric(),
+                           long = numeric())
+
+for (row in c(1:nrow(trAggS2S))) {
+  df_new_start &lt;- data.frame(trAggS2S[row, &quot;strt_statn&quot;],paste(as.character(trAggS2S[row, &quot;strt_statn&quot;]),as.character(trAggS2S[row, &quot;end_statn&quot;]), sep = '_'),trAggS2S[row, &quot;cnt&quot;], trAggS2S[row, &quot;strtLng&quot;], trAggS2S[row,&quot;strtLat&quot;])
+  names(df_new_start) &lt;- c(&quot;statn&quot;, &quot;path_id&quot;, &quot;cnt&quot;, &quot;lat&quot;, &quot;long&quot;)
+  tableau_path &lt;- rbind(tableau_path, df_new_start)
+  df_new_end &lt;- data.frame(trAggS2S[row, &quot;end_statn&quot;],paste(as.character(trAggS2S[row, &quot;strt_statn&quot;]),as.character(trAggS2S[row, &quot;end_statn&quot;]), sep = '_'),trAggS2S[row, &quot;cnt&quot;], trAggS2S[row, &quot;endLng&quot;], trAggS2S[row,&quot;endLat&quot;])
+  names(df_new_end) &lt;- c(&quot;statn&quot;, &quot;path_id&quot;, &quot;cnt&quot;, &quot;lat&quot;, &quot;long&quot;)
+  tableau_path &lt;- rbind(tableau_path, df_new_end)
+}
+</code></pre>
+
+<h6 id="let-s-see-it">Let&rsquo;s see it.</h6>
+
+<pre><code class="language-r">head(tableau_path)
+</code></pre>
+
+<pre><code>##   statn path_id cnt       lat     long
+## 1     3   3_106   1 -71.10081 42.34002
+## 2   106   3_106   1 -71.04586 42.33569
+## 3     3   3_119   1 -71.10081 42.34002
+## 4   119   3_119   1 -71.07655 42.35041
+## 5     3   3_130   1 -71.10081 42.34002
+## 6   130   3_130   1 -71.11402 42.37637
+</code></pre>
+
+<h3 id="visualiziations">Visualiziations</h3>
+
+<p>By embedding Tableau visualizations in rmarkdown <iframe 
+  src = "https://public.tableau.com/views/HubwayVisualizationChallenge/FinalStory?:showVizHome=no&:embed=true&:display_count=yes&publish=yes"
+  height="650" width="1100"></iframe></p>
+
+	</article>
+</main>
+
+<div id="bottom-nav" class="text-center center-block">
+	<a href=" https://mayankshah1.github.io/" class="btn btn-default"><i class="fa fa-home"></i> Home</a>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "shortcode-here" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+  </div>
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'code-here', 'auto');
+    ga('send', 'pageview');
+    window.baseURL = "https:\/\/mayankshah1.github.io\/";
+  </script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+  
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+  
+  <script src="https://mayankshah1.github.io//js/App.js"></script>
+  
+</body>
+</html>
