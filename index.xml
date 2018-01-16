@@ -6,10 +6,21 @@
     <description>Recent content on Mayank Shah</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 07 Jan 2018 20:09:03 +0530</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jan 2018 14:09:58 +0530</lastBuildDate>
     
 	<atom:link href="https://mayankshah1.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Reddit Questions Clustering</title>
+      <link>https://mayankshah1.github.io/post/reddit-questions-clustering/</link>
+      <pubDate>Tue, 16 Jan 2018 14:09:58 +0530</pubDate>
+      
+      <guid>https://mayankshah1.github.io/post/reddit-questions-clustering/</guid>
+      <description>Reddit Questions Clustering Introduction I decided to play around some clustering and also wanted to learn using Reddit API.
+Hence I came up with an idea to use a bag of words model to cluster the top questions on /r/AskReddit. Pull the data using the Reddit API.
+Objective In this blog, I will try to document the steps that I took to create my clustering of hot questions on Reddit.</description>
+    </item>
     
     <item>
       <title>Hubway Visualization Challenge</title>

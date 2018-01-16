@@ -6,9 +6,37 @@
     <description>Recent content in Tags on Mayank Shah</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Tue, 16 Jan 2018 14:09:58 +0530</lastBuildDate>
     
 	<atom:link href="https://mayankshah1.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Clustering</title>
+      <link>https://mayankshah1.github.io/tags/clustering/</link>
+      <pubDate>Tue, 16 Jan 2018 14:09:58 +0530</pubDate>
+      
+      <guid>https://mayankshah1.github.io/tags/clustering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Natural Language Processing</title>
+      <link>https://mayankshah1.github.io/tags/natural-language-processing/</link>
+      <pubDate>Tue, 16 Jan 2018 14:09:58 +0530</pubDate>
+      
+      <guid>https://mayankshah1.github.io/tags/natural-language-processing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reddit Api</title>
+      <link>https://mayankshah1.github.io/tags/reddit-api/</link>
+      <pubDate>Tue, 16 Jan 2018 14:09:58 +0530</pubDate>
+      
+      <guid>https://mayankshah1.github.io/tags/reddit-api/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
